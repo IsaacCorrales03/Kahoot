@@ -18,16 +18,7 @@ questions_pool = [
         "options": ["Liberty Enlightening the World", "The Lady of Liberty", "The Statue of Independence", "America's Torch"],
         "correct": 0
     },
-    {
-        "question": "In what year was the Empire State Building inaugurated?",
-        "options": ["1929", "1931", "1933", "1935"],
-        "correct": 1
-    },
-    {
-        "question": "How many main parks does Central Park have?",
-        "options": ["1", "2", "3", "4"],
-        "correct": 0
-    },
+ 
     {
         "question": "What does 'Manhattan' mean in the Native American language?",
         "options": ["Rocky island", "Sacred land", "Freshwater", "Island of hills"],
