@@ -14,102 +14,102 @@ rooms = {}
 # Almacenar preguntas y respuestas
 questions_pool = [
     {
-        "question": "¿Cuál es el nombre completo de la Estatua de la Libertad?",
-        "options": ["La Libertad Iluminando el Mundo", "La Dama de la Libertad", "La Estatua de la Independencia", "La Antorcha de América"],
+        "question": "What is the full name of the Statue of Liberty?",
+        "options": ["Liberty Enlightening the World", "The Lady of Liberty", "The Statue of Independence", "America's Torch"],
         "correct": 0
     },
     {
-        "question": "¿En qué año se inauguró el Empire State Building?",
+        "question": "In what year was the Empire State Building inaugurated?",
         "options": ["1929", "1931", "1933", "1935"],
         "correct": 1
     },
     {
-        "question": "¿Cuántos parques principales tiene Central Park?",
+        "question": "How many main parks does Central Park have?",
         "options": ["1", "2", "3", "4"],
         "correct": 0
     },
     {
-        "question": "¿Qué significa 'Manhattan' en lenguaje nativo americano?",
-        "options": ["Isla rocosa", "Tierra sagrada", "Agua dulce", "Isla de las colinas"],
+        "question": "What does 'Manhattan' mean in the Native American language?",
+        "options": ["Rocky island", "Sacred land", "Freshwater", "Island of hills"],
         "correct": 0
     },
     {
-        "question": "¿Cuál es el puente más famoso de Nueva York?",
-        "options": ["Puente de Manhattan", "Puente de Brooklyn", "Puente de Williamsburg", "Puente de Queensboro"],
+        "question": "What is the most famous bridge in New York?",
+        "options": ["Manhattan Bridge", "Brooklyn Bridge", "Williamsburg Bridge", "Queensboro Bridge"],
         "correct": 1
     },
     {
-        "question": "¿En qué distrito se encuentra Times Square?",
+        "question": "In which borough is Times Square located?",
         "options": ["Brooklyn", "Queens", "Manhattan", "Bronx"],
         "correct": 2
     },
     {
-        "question": "¿Cuántas líneas de metro tiene aproximadamente NYC?",
+        "question": "Approximately how many subway lines does NYC have?",
         "options": ["15", "20", "25", "30"],
         "correct": 2
     },
     {
-        "question": "¿Qué famoso parque está en el Bronx?",
+        "question": "Which famous park is located in the Bronx?",
         "options": ["Prospect Park", "Central Park", "Bryant Park", "Bronx Zoo (Bronx Park)"],
         "correct": 3
     },
     {
-        "question": "¿Cuál es el edificio más alto de NYC actualmente?",
+        "question": "What is currently the tallest building in NYC?",
         "options": ["Empire State", "One World Trade Center", "Central Park Tower", "432 Park Avenue"],
         "correct": 2
     },
     {
-        "question": "¿En qué isla está la Estatua de la Libertad?",
+        "question": "On which island is the Statue of Liberty located?",
         "options": ["Manhattan", "Staten Island", "Liberty Island", "Ellis Island"],
         "correct": 2
     },
     {
-        "question": "¿Cuál es el apodo más famoso de Nueva York?",
-        "options": ["La Gran Manzana", "La Ciudad Dorada", "La Metrópolis", "La Ciudad Imperial"],
+        "question": "What is New York's most famous nickname?",
+        "options": ["The Big Apple", "The Golden City", "The Metropolis", "The Imperial City"],
         "correct": 0
     },
     {
-        "question": "¿Qué teatro es famoso en Broadway?",
+        "question": "Which theater is famous on Broadway?",
         "options": ["Apollo Theater", "Madison Square Garden", "Lincoln Center", "Majestic Theatre"],
         "correct": 3
     },
     {
-        "question": "¿Cuántos pisos tiene el Empire State Building?",
+        "question": "How many floors does the Empire State Building have?",
         "options": ["100", "102", "105", "110"],
         "correct": 1
     },
     {
-        "question": "¿Qué río separa Manhattan del Bronx?",
-        "options": ["Río Hudson", "Río East", "Río Harlem", "Río Jamaica"],
+        "question": "Which river separates Manhattan from the Bronx?",
+        "options": ["Hudson River", "East River", "Harlem River", "Jamaica River"],
         "correct": 2
     },
     {
-        "question": "¿En qué año ocurrió el 11 de septiembre?",
+        "question": "In what year did 9/11 occur?",
         "options": ["2000", "2001", "2002", "2003"],
         "correct": 1
     },
     {
-        "question": "¿Cuál es la calle más larga de Manhattan?",
+        "question": "What is the longest street in Manhattan?",
         "options": ["5th Avenue", "Broadway", "Madison Avenue", "Park Avenue"],
         "correct": 1
     },
     {
-        "question": "¿Qué universidad famosa está en NYC?",
+        "question": "Which famous university is in NYC?",
         "options": ["Harvard", "Yale", "Columbia", "Princeton"],
         "correct": 2
     },
     {
-        "question": "¿Cuál es el barrio chino más grande fuera de Asia?",
+        "question": "What is the largest Chinatown outside of Asia?",
         "options": ["Chinatown SF", "Chinatown NYC", "Chinatown LA", "Chinatown Toronto"],
         "correct": 1
     },
     {
-        "question": "¿Qué museo está en Central Park?",
+        "question": "Which museum is in Central Park?",
         "options": ["MoMA", "Guggenheim", "Metropolitan Museum", "Whitney"],
         "correct": 2
     },
     {
-        "question": "¿Cuándo se construyó el primer rascacielos en NYC?",
+        "question": "When was the first skyscraper in NYC built?",
         "options": ["1885", "1890", "1895", "1900"],
         "correct": 0
     }
