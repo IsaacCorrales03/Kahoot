@@ -1,0 +1,268 @@
+<!-- templates/host.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Host - Trivia NYC</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 800px;
+            width: 90%;
+        }
+        
+        h1, h2, h3 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            margin: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .room-code {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #e74c3c;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+        
+        .players-list {
+            text-align: left;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .player-item {
+            padding: 10px;
+            margin: 5px 0;
+            background: #f8f9fa;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .question-container {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 1rem 0;
+        }
+        
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .option-btn {
+            padding: 20px;
+            font-size: 1.2rem;
+            border: 3px solid #ddd;
+            background: white;
+            border-radius: 15px;
+        }
+        
+        .ranking {
+            background: #2c3e50;
+            color: white;
+            padding: 1rem;
+            border-radius: 15px;
+            margin: 1rem 0;
+        }
+        
+        .rank-item {
+            padding: 10px;
+            margin: 5px 0;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Panel de Host</h1>
+
+        <div id="create-room" class="step">
+            <button class="btn" onclick="createRoom()">Crear Nueva Sala</button>
+        </div>
+
+        <div id="room-created" class="step" style="display: none;">
+            <h2>¡Sala Creada!</h2>
+            <div class="room-code" id="room-code-display"></div>
+            <p>Comparte este código con los jugadores</p>
+            
+            <div id="players-waiting">
+                <h3>Jugadores conectados:</h3>
+                <div id="players-list" class="players-list"></div>
+                <button class="btn" onclick="startGame()" id="start-btn" disabled>Iniciar Juego</button>
+            </div>
+        </div>
+
+        <div id="game-active" class="step" style="display: none;">
+            <div id="question-display" class="question-container">
+                <h2 id="question-text"></h2>
+                <div class="options-grid" id="host-options"></div>
+                <div id="question-info"></div>
+            </div>
+            
+            <div id="answers-status">
+                <h3>Respuestas recibidas:</h3>
+                <div id="answers-list"></div>
+            </div>
+            
+            <button class="btn" onclick="nextQuestion()" id="next-btn" style="display: none;">
+                Siguiente Pregunta
+            </button>
+        </div>
+
+        <div id="game-finished" class="step" style="display: none;">
+            <h2>🎉 ¡Juego Terminado!</h2>
+            <div id="final-rankings" class="ranking"></div>
+            <button class="btn" onclick="location.reload()">Nueva Partida</button>
+        </div>
+    </div>
+
+    <script>
+        const socket = io();
+        let roomCode = '';
+        let currentQuestion = 0;
+
+        function createRoom() {
+            fetch('/create_room', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then(response => response.json())
+            .then(data => {
+                roomCode = data.room_code;
+                document.getElementById('room-code-display').textContent = roomCode;
+                document.getElementById('create-room').style.display = 'none';
+                document.getElementById('room-created').style.display = 'block';
+                
+                socket.emit('host_join', {room_code: roomCode});
+            });
+        }
+
+        function startGame() {
+            socket.emit('start_game', {room_code: roomCode});
+            document.getElementById('room-created').style.display = 'none';
+            document.getElementById('game-active').style.display = 'block';
+        }
+
+        function nextQuestion() {
+            socket.emit('next_question', {room_code: roomCode});
+            document.getElementById('next-btn').style.display = 'none';
+            document.getElementById('answers-list').innerHTML = '';
+        }
+
+        socket.on('players_update', function(data) {
+            const playersList = document.getElementById('players-list');
+            playersList.innerHTML = '';
+            
+            data.players.forEach(player => {
+                const playerDiv = document.createElement('div');
+                playerDiv.className = 'player-item';
+                playerDiv.innerHTML = `<span>${player.name}</span><span>Puntos: ${player.score}</span>`;
+                playersList.appendChild(playerDiv);
+            });
+            
+            document.getElementById('start-btn').disabled = data.players.length === 0;
+        });
+
+        socket.on('new_question', function(data) {
+            document.getElementById('question-text').textContent = data.question;
+            document.getElementById('question-info').textContent = 
+                `Pregunta ${data.question_number} de ${data.total_questions}`;
+            
+            const optionsDiv = document.getElementById('host-options');
+            optionsDiv.innerHTML = '';
+            
+            data.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option-btn';
+                optionDiv.textContent = `${String.fromCharCode(65 + index)}: ${option}`;
+                optionsDiv.appendChild(optionDiv);
+            });
+        });
+
+        socket.on('answer_received', function(data) {
+            const answersList = document.getElementById('answers-list');
+            const answerDiv = document.createElement('div');
+            answerDiv.className = 'player-item';
+            answerDiv.innerHTML = `
+                <span>${data.player} - Opción ${data.answer}</span>
+                <span style="color: ${data.correct ? 'green' : 'red'}">
+                    ${data.correct ? '✓' : '✗'}
+                </span>
+            `;
+            answersList.appendChild(answerDiv);
+            
+            document.getElementById('next-btn').style.display = 'block';
+        });
+
+        socket.on('game_finished', function(data) {
+            document.getElementById('game-active').style.display = 'none';
+            document.getElementById('game-finished').style.display = 'block';
+            
+            const rankingsDiv = document.getElementById('final-rankings');
+            rankingsDiv.innerHTML = '<h3>🏆 Ranking Final</h3>';
+            
+            data.rankings.forEach((player, index) => {
+                const rankDiv = document.createElement('div');
+                rankDiv.className = 'rank-item';
+                rankDiv.innerHTML = `
+                    <span>${index + 1}. ${player.name}</span>
+                    <span>${player.score} puntos</span>
+                `;
+                rankingsDiv.appendChild(rankDiv);
+            });
+        });
+    </script>
+</body>
+</html>
